@@ -61,6 +61,17 @@ var Node = exports.Node = function (id, parent) {
   this.children = [];
 }
 
+Node.prototype.set = function (values) {
+  if (arguments.length == 2) {
+    values = {};
+    values[arguments[0]] = arguments[1];
+  }
+  
+  for (var key in values) {
+    this.child(key).value = values[key];
+  }
+};
+
 Node.prototype.child = function (path) {
   var match;
   if (match = path.match(/\//)) {
