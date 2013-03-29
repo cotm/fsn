@@ -15,7 +15,37 @@ var Switcher = exports.Switcher = function (options) {
   if (!options.host) options.host = '192.168.0.4';
   if (!options.port) options.port = 9876;
   if (!options.asyncPort) options.asyncPort = 9877;
+  
+  this.callbacks = [];
+  
+  var self = this;
+  
+  var socket = this.socket = net.connect({
+    host: options.host,
+    port: options.port
+  },
+  function () {
+    var parser = new Parser();
+    
+    socket.on('data', function (data) {
+      parser.write(data);
+    });
+    
+    parser.on('message', function (message) {
+      if (message.name == 'Frame') {
+        var callback = self.callbacks.pop();
+        callback(message);
+      }
+    });
+  });
 }
+
+Switcher.prototype.send = function (message, callback) {
+  if (typeof callback != 'function')
+    callback = function () {};
+  this.callbacks.push(callback);
+  this.socket.write(message.toString());
+};
 
 var Node = exports.Node = function (id, parent) {
   this.id = id;
