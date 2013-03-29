@@ -8,5 +8,10 @@
   "dependencies": {
   },
   
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/cotm/fsn"
+  },
+  
   "main": "fsn"
 }
