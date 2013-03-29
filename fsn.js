@@ -47,6 +47,20 @@ Switcher.prototype.send = function (message, callback) {
   this.socket.write(message.toString());
 };
 
+Switcher.prototype.set = function (values, callback) {
+  var message = new Node();
+  for (var key in values)
+    message.child(key).value = values[key];
+  this.send(message, callback);
+};
+
+Switcher.prototype.action = function (key, callback) {
+  var message = new Node();
+  message.child('Frame:0/CmdType').value = '1';
+  message.child(key).isAction = true;
+  this.send(message, callback);
+};
+
 var Node = exports.Node = function (id, parent) {
   this.id = id;
   
@@ -60,17 +74,6 @@ var Node = exports.Node = function (id, parent) {
   this.parent = parent;
   this.children = [];
 }
-
-Node.prototype.set = function (values) {
-  if (arguments.length == 2) {
-    values = {};
-    values[arguments[0]] = arguments[1];
-  }
-  
-  for (var key in values) {
-    this.child(key).value = values[key];
-  }
-};
 
 Node.prototype.child = function (path) {
   var match;

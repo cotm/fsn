@@ -30,3 +30,11 @@ switcher.send(command, function (response) {
 ### switcher.send(message, callback)
 
   Send `message` (an fsn.Node) to the switcher and return the response (also as a Node) as the first argument to the `callback` function.
+
+### switcher.set(values, callback)
+
+  Set switcher values with the keys from the Object `values`.
+
+### switcher.action(key, callback)
+
+  Send `key` as an action. Automatically sets the `CmdType` to `1`.
