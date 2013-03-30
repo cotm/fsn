@@ -31,6 +31,10 @@ switcher.send(command, function (response) {
 
   Send `message` (an fsn.Node) to the switcher and return the response (also as a Node) as the first argument to the `callback` function.
 
+### switcher.query(callback)
+
+  Query everything and send it to `callback`.
+
 ### switcher.set(values, callback)
 
   Set switcher values with the keys from the Object `values`.

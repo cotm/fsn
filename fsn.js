@@ -47,6 +47,14 @@ Switcher.prototype.send = function (message, callback) {
   this.socket.write(message.toString());
 };
 
+Switcher.prototype.query = function (callback) {
+  var message = new Node();
+  message.child('CmdType').value = '3';
+  message.child('Query').value = '3';
+  message.child('Recursive').value = '1';
+  this.send(message, callback);
+};
+
 Switcher.prototype.set = function (values, callback) {
   var message = new Node();
   for (var key in values)
