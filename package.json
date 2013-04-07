@@ -1,17 +1,17 @@
 {
   "name": "fsn",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Control Barco FSN series switchers",
-  "keywords": ["barco", "switcher", "video"],
+  "keywords": [
+    "barco",
+    "switcher",
+    "video"
+  ],
   "author": "Todd Yandell <tyandell@churchonthemove.com>",
-  
-  "dependencies": {
-  },
-  
+  "dependencies": {},
   "repository": {
     "type": "git",
     "url": "http://github.com/cotm/fsn"
   },
-  
   "main": "fsn"
 }
