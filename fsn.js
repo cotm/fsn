@@ -50,7 +50,7 @@ Switcher.prototype.send = function (message, callback) {
 };
 
 Switcher.prototype.query = function (callback) {
-  var message = new Node();
+  var message = new Node('Frame:0');
   message.child('CmdType').value = '3';
   message.child('Query').value = '3';
   message.child('Recursive').value = '1';
