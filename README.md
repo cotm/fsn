@@ -23,9 +23,15 @@ switcher.send(command, function (response) {
 
 ## API
 
-### var switcher = fsn.connect(host, port, asyncPort)
+### var switcher = fsn.connect(options)
 
-  Connect to the switcher. The standard FSN host (192.168.0.4) and ports (9876 and 9877) will be used if `host`, `port`, and `asyncPort` are not specified.
+Create a connection to the switcher. The defaults should just work:
+
+* `options.host = '192.168.0.4'` — default host for sockets
+* `options.xmlHost = options.host` — XML socket host
+* `options.xmlPort = 9876` — XML socket port
+* `options.asyncHost = options.host` — async socket host
+* `options.asyncPort = 9877` — async socket port
 
 ### switcher.send(message, callback)
 
