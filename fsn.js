@@ -2,32 +2,25 @@ var net          = require('net'),
     EventEmitter = require('events').EventEmitter,
     inherits     = require('util').inherits;
 
-exports.connect = function (host, port, asyncPort) {
-  var options = {};
-  if (arguments.length > 0) options.host = host;
-  if (arguments.length > 1) options.port = port;
-  if (arguments.length > 2) options.asyncPort = asyncPort;
+exports.connect = function (options) {
   return new Switcher(options);
 };
 
 var Switcher = exports.Switcher = function (options) {
-  if (!options) options = {};
-  if (!options.host) options.host = '192.168.0.4';
-  if (!options.port) options.port = 9876;
-  if (!options.asyncPort) options.asyncPort = 9877;
+  EventEmitter.call(this);
   
   this.callbacks = [];
   
   var self = this;
   
-  var socket = this.socket = net.connect({
-    host: options.host,
-    port: options.port
+  var xmlSocket = this.xmlSocket = net.connect({
+    host: options.xmlHost || options.host || '192.168.0.4',
+    port: options.xmlPort || 9876
   },
   function () {
     var parser = new Parser();
     
-    socket.on('data', function (data) {
+    xmlSocket.on('data', function (data) {
       parser.write(data);
     });
     
@@ -38,13 +31,22 @@ var Switcher = exports.Switcher = function (options) {
       }
     });
   });
+  
+  var asyncSocket = this.asyncSocket = net.connect({
+    host: options.asyncHost || options.host || '192.168.0.4',
+    port: options.asyncPort || 9877
+  },
+  function () {
+  });
 }
+
+inherits(Switcher, EventEmitter);
 
 Switcher.prototype.send = function (message, callback) {
   if (typeof callback != 'function')
     callback = function () {};
   this.callbacks.push(callback);
-  this.socket.write(message.toString());
+  this.xmlSocket.write(message.toString());
 };
 
 Switcher.prototype.query = function (callback) {
