@@ -25,6 +25,8 @@ var Switcher = exports.Switcher = function (options) {
     });
     
     parser.on('message', function (message) {
+      self.emit('message', message);
+      
       if (message.name == 'Frame') {
         var callback = self.callbacks.pop();
         callback(message);
@@ -37,6 +39,15 @@ var Switcher = exports.Switcher = function (options) {
     port: options.asyncPort || 9877
   },
   function () {
+    var parser = new Parser();
+    
+    asyncSocket.on('data', function (data) {
+      parser.write(data);
+    });
+    
+    parser.on('message', function (message) {
+      self.emit('message', message);
+    });
   });
 }
 
