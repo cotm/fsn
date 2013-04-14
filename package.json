@@ -1,6 +1,6 @@
 {
   "name": "fsn",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Control Barco FSN series switchers",
   "keywords": [
     "barco",
