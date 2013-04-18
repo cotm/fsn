@@ -5,13 +5,19 @@ var source = require('../lib/source'),
 
 describe('fsn.source', function () {
   describe('Source', function () {
+    var test = new source.Source({Test: '1'});
+    
     it('adds values to node', function () {
       var node = new Node('Frame:0');
-      (new source.Source({Test: '1'})).applyTo(node);
+      test.applyTo(node);
       node.children.length.should.eql(1);
       should.exist(node.children[0].value);
       node.children[0].id.should.eql('Test');
       node.child('Test').value.should.eql('1');
+    });
+    
+    it('serialize to JSON', function () {
+      JSON.stringify(test).should.eql('{"Test":"1"}');
     });
   });
   
