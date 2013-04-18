@@ -16,6 +16,21 @@ var switcher = {
 describe('fsn.Scope', function () {
   var scope = switcher.scope('Test');
   
+  it('has fsn.Switcher methods', function () {
+    var switcher = require('../lib/switcher').Switcher.prototype;
+    
+    var exceptMethods = ['end', 'send', 'query'];
+    
+    for (var i in switcher) {
+      if (!switcher.hasOwnProperty(i)) continue;
+      if (typeof switcher[i] != 'function') continue;
+      if (exceptMethods.indexOf(i) != -1) continue;
+      
+      scope[i].should.be.a('function');
+      scope[i].length.should.eql(switcher[i].length);
+    }
+  });
+  
   describe('Scope#set', function () {
     it('add prefix to each path', function () {
       var mock = sinon.mock(switcher);
