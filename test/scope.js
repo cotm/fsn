@@ -32,10 +32,17 @@ describe('fsn.Scope', function () {
   });
   
   describe('Scope#set', function () {
-    it('add prefix to each path', function () {
+    it('add prefix to each path (Object)', function () {
       var mock = sinon.mock(switcher);
       mock.expects('set').withArgs({'Test/A': 1, 'Test/B': 2});
       scope.set({A: 1, B: 2});
+      mock.verify();
+    });
+    
+    it('add prefix to each path (path, value)', function () {
+      var mock = sinon.mock(switcher);
+      mock.expects('set').withArgs({'Test/A': 1});
+      scope.set('A', 1);
       mock.verify();
     });
   });
