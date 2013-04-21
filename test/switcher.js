@@ -51,6 +51,28 @@ describe('fsn.Switcher', function () {
         switcher.once('message', checkMessage(done));
       });
     });
+    
+    describe('root, not recursive', function () {
+      it('return response', function (done) {
+        switcher.query('', false, checkMessage(done));
+      });
+      
+      it('emit `message`', function (done) {
+        switcher.query('', false);
+        switcher.once('message', checkMessage(done));
+      });
+    });
+    
+    describe('limit to path, not recursive', function () {
+      it('return response', function (done) {
+        switcher.query('MECard:0/HME:0/DSK:0', false, checkMessage(done));
+      });
+      
+      it('emit `message`', function (done) {
+        switcher.query('MECard:0/HME:0/DSK:0', false);
+        switcher.once('message', checkMessage(done));
+      });
+    });
   });
   
   describe('Switcher#set', function () {
@@ -65,7 +87,7 @@ describe('fsn.Switcher', function () {
       });
     });
     
-    describe('with path and value', function () {
+    describe('with path, value', function () {
       it('return response', function (done) {
         switcher.set('Test', 1, checkMessage(done));
       });
