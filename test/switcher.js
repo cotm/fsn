@@ -19,50 +19,66 @@ xdescribe('fsn.Switcher', function () {
   });
   
   describe('Switcher#send', function () {
-    testNormalResponses(function (callback) {
-      switcher.send(new Node('Frame:0'), callback);
+    it('return response', function (done) {
+      switcher.send(new Node('Frame:0'), done);
+    });
+    
+    it('emit `message`', function (done) {
+      switcher.send(new Node('Frame:0'));
+      switcher.once('message', done);
     });
   });
   
   describe('Switcher#query', function () {
-    testNormalResponses(function (callback) {
-      switcher.query(callback);
+    it('return response', function (done) {
+      switcher.query(done);
+    });
+    
+    it('emit `message`', function (done) {
+      switcher.query();
+      switcher.once('message', done);
     });
   });
   
   describe('Switcher#set', function () {
-    testNormalResponses(function (callback) {
-      switcher.set({'Test': 1, 'Test/Test': 2}, callback);
+    it('return response (hashmap)', function (done) {
+      switcher.set({'Test': 1, 'Test/Test': 2}, done);
+    });
+    
+    it('emit `message` (hashmap)', function (done) {
+      switcher.set({'Test': 1, 'Test/Test': 2});
+      switcher.once('message', done);
+    });
+    
+    it('return response (key, value)', function (done) {
+      switcher.set('Test', 1, done);
+    });
+    
+    it('emit `message` (key, value)', function (done) {
+      switcher.set('Test', 1);
+      switcher.once('message', done);
     });
   });
   
   describe('Switcher#action', function () {
-    testNormalResponses(function (callback) {
-      switcher.action('Test', callback);
+    it('return response', function (done) {
+      switcher.action('Test', done);
+    });
+    
+    it('emit `message`', function (done) {
+      switcher.action('Test');
+      switcher.once('message', done);
     });
   });
   
   describe('Switcher#source', function () {
-    testNormalResponses(function (callback) {
-      switcher.source('Test', source.xpt(1), callback)
-    });
-  });
-  
-  function testNormalResponses (test) {
-    it('returns a response', function (done) {
-      test(function (response) {
-        response.should.be.an.instanceOf(Node);
-        done();
-      });
+    it('return response', function (done) {
+      switcher.source('Test', source.xpt(1), done);
     });
     
-    it('emits a `message` event', function (done) {
-      switcher.once('message', function (response) {
-        response.should.be.an.instanceOf(Node);
-        done();
-      });
-      
-      test(function () {});
+    it('emit `message`', function (done) {
+      switcher.source('Test', source.xpt(1));
+      switcher.once('message', done);
     });
-  }
+  });
 });

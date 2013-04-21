@@ -12,11 +12,11 @@
 var fsn = require('fsn');
 var switcher = fsn.connect();
 
-var command = new fsn.Node('Frame:0');
-command.child('CmdType').value = '1';
-command.child('MECard:0/HME:0/DSK:0/Key:0/Cut').isAction = true;
+var dsk = switcher.scope('Frame:0/MECard:0/HME:0/DSK:0/Key:0');
 
-switcher.send(command, function (response) {
+dsk.set('TransTime', 30);
+
+dsk.action('AutoTrans', function (response) {
   console.log(response.toString());
 });
 ```
