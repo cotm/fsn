@@ -8,7 +8,7 @@
 
 ## Example
 
-```
+```js
 var fsn = require('fsn');
 var switcher = fsn.connect();
 
@@ -35,27 +35,27 @@ Create a connection to the switcher. The defaults should just work:
 
 ### switcher.send(message, callback)
 
-  Send `message` (an fsn.Node) to the switcher and return the response (also as a Node) as the first argument to the `callback` function.
+Send `message` (an fsn.Node) to the switcher and return the response (also as a Node) as the first argument to the `callback` function.
 
 ### switcher.query(callback)
 
-  Query everything and send it to `callback`.
+Query everything and send it to `callback`.
 
 ### switcher.set(values, callback)
 
-  Set switcher values with the keys from the Object `values`.
+Set switcher values with the keys from the Object `values`.
 
 ### switcher.set(path, value, callback)
 
-  Same as above only with a single (path, value) pair.
+Same as above only with a single (path, value) pair.
 
 ### switcher.action(path, callback)
 
-  Send `path` as an action. Automatically sets the `CmdType` to `1`.
+Send `path` as an action. Automatically sets the `CmdType` to `1`.
 
 ### switcher.source(path, source, callback)
 
-  Set source settings for `path` using `source`. See below:
+Set source settings for `path` using `source`. See below:
 
 ### fsn.source.xpt(xpt)
 
@@ -64,4 +64,14 @@ fsn.source.xpt(19)            // => NIC 1 connector 1
 fsn.source.xpt('slot1', 0)    // => NIC 1 connector 1
 fsn.source.xpt('hme', 'pgm')  // => program return
 fsn.source.xpt('fme1', 'pvw') // => M/E2 preview return
+```
+
+### switcher.scope(prefix)
+
+Returns an object that automatically prefixes all paths with `prefix`. This object has `send`, `set`, `action`, and `source` methods that match the description of those above, as well its own `scope` method to return other scoped objects:
+
+```js
+var meCard = switcher.scope('Frame:0/MECard:0');
+var hme = meCard.scope('HME:0');
+hme.action('ME:0/AutoTrans');
 ```
