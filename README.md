@@ -45,6 +45,23 @@ Create a connection to the switcher. The defaults should just work:
 
   Set switcher values with the keys from the Object `values`.
 
+### switcher.set(path, value, callback)
+
+  Same as above only with a single (path, value) pair.
+
 ### switcher.action(path, callback)
 
   Send `path` as an action. Automatically sets the `CmdType` to `1`.
+
+### switcher.source(path, source, callback)
+
+  Set source settings for `path` using `source`. See below:
+
+### fsn.source.xpt(xpt)
+
+```js
+fsn.source.xpt(19)            // => NIC 1 connector 1
+fsn.source.xpt('slot1', 0)    // => NIC 1 connector 1
+fsn.source.xpt('hme', 'pgm')  // => program return
+fsn.source.xpt('fme1', 'pvw') // => M/E2 preview return
+```
