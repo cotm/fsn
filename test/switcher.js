@@ -30,33 +30,50 @@ describe('fsn.Switcher', function () {
   });
   
   describe('Switcher#query', function () {
-    it('return response', function (done) {
-      switcher.query(checkMessage(done));
+    describe('everything', function () {
+      it('return response', function (done) {
+        switcher.query(checkMessage(done));
+      });
+      
+      it('emit `message`', function (done) {
+        switcher.query();
+        switcher.once('message', checkMessage(done));
+      });
     });
     
-    it('emit `message`', function (done) {
-      switcher.query();
-      switcher.once('message', checkMessage(done));
+    describe('limit to path', function () {
+      it('return response', function (done) {
+        switcher.query('MECard:0/HME:0/DSK:0/DSKInpt:0', checkMessage(done));
+      });
+      
+      it('emit `message`', function (done) {
+        switcher.query('MECard:0/HME:0/DSK:0/DSKInpt:0');
+        switcher.once('message', checkMessage(done));
+      });
     });
   });
   
   describe('Switcher#set', function () {
-    it('return response (Object)', function (done) {
-      switcher.set({'Test': 1, 'Test/Test': 2}, checkMessage(done));
+    describe('with Object', function () {
+      it('return response', function (done) {
+        switcher.set({'Test': 1, 'Test/Test': 2}, checkMessage(done));
+      });
+      
+      it('emit `message`', function (done) {
+        switcher.set({'Test': 1, 'Test/Test': 2});
+        switcher.once('message', checkMessage(done));
+      });
     });
     
-    it('emit `message` (Object)', function (done) {
-      switcher.set({'Test': 1, 'Test/Test': 2});
-      switcher.once('message', checkMessage(done));
-    });
-    
-    it('return response (path, value)', function (done) {
-      switcher.set('Test', 1, checkMessage(done));
-    });
-    
-    it('emit `message` (path, value)', function (done) {
-      switcher.set('Test', 1);
-      switcher.once('message', checkMessage(done));
+    describe('with path and value', function () {
+      it('return response', function (done) {
+        switcher.set('Test', 1, checkMessage(done));
+      });
+      
+      it('emit `message`', function (done) {
+        switcher.set('Test', 1);
+        switcher.once('message', checkMessage(done));
+      });
     });
   });
   

@@ -78,6 +78,5 @@ hme.action('ME:0/AutoTrans');
 
 ## To Do
 
-- Allow partial queries with Switcher#query so the entire state doesn’t have to be parsed at once.
 - Store known switcher state in its `state` property and update the values whenever a message is received (whether from the XML socket or the async socket).
 - Helpers for returning Scope objects with commonly-used paths.
