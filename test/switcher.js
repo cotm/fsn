@@ -13,118 +13,102 @@ var switcher = new Switcher({
 
 describe('fsn.Switcher', function () {
   describe('Switcher#scope', function () {
-    it('returns an fsn.Scope', function () {
+    it('returns an instance of Scope', function () {
       switcher.scope('MECard:0').should.be.an.instanceOf(Scope);
     });
   });
   
   describe('Switcher#send', function () {
-    it('return response', function (done) {
-      switcher.send(new Node('Frame:0'), checkMessage(done));
+    it('returns response as a Node', function (done) {
+      switcher.send(new Node('Frame:0'), function (response) {
+        response.should.be.an.instanceOf(Node);
+        response.id.should.eql('Frame:0');
+        done();
+      });
     });
     
-    it('emit `message`', function (done) {
+    it('emits `message`', function (done) {
+      switcher.once('message', function (message) {
+        message.should.be.an.instanceOf(Node);
+        message.id.should.eql('Frame:0');
+        done();
+      });
+      
       switcher.send(new Node('Frame:0'));
-      switcher.once('message', checkMessage(done));
     });
   });
   
   describe('Switcher#query', function () {
-    describe('everything', function () {
-      it('return response', function (done) {
-        switcher.query(checkMessage(done));
-      });
-      
-      it('emit `message`', function (done) {
-        switcher.query();
-        switcher.once('message', checkMessage(done));
+    it('no args queries everything', function (done) {
+      switcher.query(function (response) {
+        response.toString().should.match(/<SWVrsn>/);
+        response.toString().should.match(/<MACAddress>/);
+        done();
       });
     });
     
-    describe('limit to path', function () {
-      it('return response', function (done) {
-        switcher.query('MECard:0/HME:0/DSK:0/DSKInpt:0', checkMessage(done));
-      });
-      
-      it('emit `message`', function (done) {
-        switcher.query('MECard:0/HME:0/DSK:0/DSKInpt:0');
-        switcher.once('message', checkMessage(done));
+    it('`{recursive: false}` only returns leaf nodes', function (done) {
+      switcher.query({recursive: false}, function (response) {
+        response.toString().should.match(/<SWVrsn>/);
+        response.toString().should.not.match(/<MACAddress>/);
+        done();
       });
     });
     
-    describe('root, not recursive', function () {
-      it('return response', function (done) {
-        switcher.query('', false, checkMessage(done));
-      });
-      
-      it('emit `message`', function (done) {
-        switcher.query('', false);
-        switcher.once('message', checkMessage(done));
+    it('`{path: <path>}` limits search to path', function (done) {
+      switcher.query({path: 'SystemCard:0'}, function (response) {
+        response.toString().should.match(/<MACAddress>/);
+        done();
       });
     });
     
-    describe('limit to path, not recursive', function () {
-      it('return response', function (done) {
-        switcher.query('MECard:0/HME:0/DSK:0', false, checkMessage(done));
+    it('`{path: <path>, recursive: false}`', function (done) {
+      switcher.query({path: 'SystemCard:0', recursive: false}, function (response) {
+        response.toString().should.match(/<PowerState>/);
+        response.toString().should.not.match(/<MACAddress>/);
+        done();
       });
-      
-      it('emit `message`', function (done) {
-        switcher.query('MECard:0/HME:0/DSK:0', false);
-        switcher.once('message', checkMessage(done));
+    });
+    
+    it('string acts like `{path: <string>}`', function (done) {
+      switcher.query('SystemCard:0/Enet:0', function (response) {
+        response.toString().should.match(/<MACAddress>/);
+        done();
       });
     });
   });
   
   describe('Switcher#set', function () {
-    describe('with Object', function () {
-      it('return response', function (done) {
-        switcher.set({'Test': 1, 'Test/Test': 2}, checkMessage(done));
-      });
-      
-      it('emit `message`', function (done) {
-        switcher.set({'Test': 1, 'Test/Test': 2});
-        switcher.once('message', checkMessage(done));
+    it('responds for Object', function (done) {
+      switcher.set({'A/B': 1, 'A/C': 2}, function (response) {
+        response.should.be.ok;
+        done();
       });
     });
     
-    describe('with path, value', function () {
-      it('return response', function (done) {
-        switcher.set('Test', 1, checkMessage(done));
-      });
-      
-      it('emit `message`', function (done) {
-        switcher.set('Test', 1);
-        switcher.once('message', checkMessage(done));
+    it('responds for path and value', function (done) {
+      switcher.set('A/B', 1, function (response) {
+        response.should.be.ok;
+        done();
       });
     });
   });
   
   describe('Switcher#action', function () {
-    it('return response', function (done) {
-      switcher.action('Test', checkMessage(done));
-    });
-    
-    it('emit `message`', function (done) {
-      switcher.action('Test');
-      switcher.once('message', checkMessage(done));
+    it('responds', function (done) {
+      switcher.action('Test', function (response) {
+        response.should.be.ok;
+        done();
+      });
     });
   });
   
   describe('Switcher#source', function () {
-    it('return response', function (done) {
-      switcher.source('Test', source.xpt(1), checkMessage(done));
-    });
-    
-    it('emit `message`', function (done) {
-      switcher.source('Test', source.xpt(1));
-      switcher.once('message', checkMessage(done));
+    it('responds', function (done) {
+      switcher.source('Test', source.xpt(1), function (response) {
+        response.should.be.ok;
+        done();
+      });
     });
   });
-  
-  function checkMessage (callback) {
-    return function (message) {
-      message.should.be.instanceOf(Node);
-      callback();
-    }
-  }
 });
