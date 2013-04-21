@@ -45,6 +45,6 @@ Create a connection to the switcher. The defaults should just work:
 
   Set switcher values with the keys from the Object `values`.
 
-### switcher.action(key, callback)
+### switcher.action(path, callback)
 
-  Send `key` as an action. Automatically sets the `CmdType` to `1`.
+  Send `path` as an action. Automatically sets the `CmdType` to `1`.

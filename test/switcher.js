@@ -41,20 +41,20 @@ xdescribe('fsn.Switcher', function () {
   });
   
   describe('Switcher#set', function () {
-    it('return response (hashmap)', function (done) {
+    it('return response (Object)', function (done) {
       switcher.set({'Test': 1, 'Test/Test': 2}, done);
     });
     
-    it('emit `message` (hashmap)', function (done) {
+    it('emit `message` (Object)', function (done) {
       switcher.set({'Test': 1, 'Test/Test': 2});
       switcher.once('message', done);
     });
     
-    it('return response (key, value)', function (done) {
+    it('return response (path, value)', function (done) {
       switcher.set('Test', 1, done);
     });
     
-    it('emit `message` (key, value)', function (done) {
+    it('emit `message` (path, value)', function (done) {
       switcher.set('Test', 1);
       switcher.once('message', done);
     });
