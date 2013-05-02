@@ -8,6 +8,7 @@ var switcher = {
     return new Scope(switcher, prefix);
   },
   
+  query: function () {},
   set: function () {},
   action: function () {},
   source: function () {}
@@ -19,7 +20,7 @@ describe('fsn.Scope', function () {
   it('has fsn.Switcher methods', function () {
     var switcher = require('../lib/switcher').Switcher.prototype;
     
-    var exceptMethods = ['end', 'send', 'query'];
+    var exceptMethods = ['end', 'send'];
     
     for (var i in switcher) {
       if (!switcher.hasOwnProperty(i)) continue;
@@ -29,6 +30,32 @@ describe('fsn.Scope', function () {
       scope[i].should.be.a('function');
       scope[i].length.should.eql(switcher[i].length);
     }
+  });
+  
+  describe('Scope#query', function () {
+    it('add prefix to path', function () {
+      var mock = sinon.mock(switcher);
+      mock.expects('query').withArgs('Test/A');
+      scope.query('A');
+      mock.verify();
+      
+      mock = sinon.mock(switcher);
+      mock.expects('query').withArgs('Test/A');
+      scope.query('A', true);
+      mock.verify();
+    });
+    
+    it('no trailing slash without explicit path', function () {
+      var mock = sinon.mock(switcher);
+      mock.expects('query').withArgs('Test');
+      scope.query();
+      mock.verify();
+      
+      mock = sinon.mock(switcher);
+      mock.expects('query').withArgs('Test');
+      scope.query(true);
+      mock.verify();
+    });
   });
   
   describe('Scope#set', function () {

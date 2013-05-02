@@ -39,75 +39,57 @@ describe('fsn.Switcher', function () {
   });
   
   describe('Switcher#query', function () {
-    it('no args queries everything', function (done) {
-      switcher.query(function (response) {
-        response.toString().should.match(/<SWVrsn>/);
-        response.toString().should.match(/<MACAddress>/);
-        done();
+    describe('Arguments', function () {
+      it('()', function () {
+        switcher.query();
+        switcher.query(function () {});
       });
-    });
-    
-    it('`{recursive: false}` only returns leaf nodes', function (done) {
-      switcher.query({recursive: false}, function (response) {
-        response.toString().should.match(/<SWVrsn>/);
-        response.toString().should.not.match(/<MACAddress>/);
-        done();
+      
+      it('(path)', function () {
+        switcher.query('SystemCard:0');
+        switcher.query('SystemCard:0', function () {});
       });
-    });
-    
-    it('`{path: <path>}` limits search to path', function (done) {
-      switcher.query({path: 'SystemCard:0'}, function (response) {
-        response.toString().should.match(/<MACAddress>/);
-        done();
+      
+      it('(path, recursive)', function () {
+        switcher.query('SystemCard:0', true);
+        switcher.query('SystemCard:0', true, function () {});
       });
-    });
-    
-    it('`{path: <path>, recursive: false}`', function (done) {
-      switcher.query({path: 'SystemCard:0', recursive: false}, function (response) {
-        response.toString().should.match(/<PowerState>/);
-        response.toString().should.not.match(/<MACAddress>/);
-        done();
-      });
-    });
-    
-    it('string acts like `{path: <string>}`', function (done) {
-      switcher.query('SystemCard:0/Enet:0', function (response) {
-        response.toString().should.match(/<MACAddress>/);
-        done();
+      
+      it('(recursive)', function () {
+        switcher.query(true);
+        switcher.query(true, function () {});
       });
     });
   });
   
   describe('Switcher#set', function () {
-    it('responds for Object', function (done) {
-      switcher.set({'A/B': 1, 'A/C': 2}, function (response) {
-        response.should.be.ok;
-        done();
+    describe('Arguments', function () {
+      it('(Object)', function () {
+        switcher.set({'A/B': 1, 'A/C': 2});
+        switcher.set({'A/B': 1, 'A/C': 2}, function () {});
       });
-    });
-    
-    it('responds for path and value', function (done) {
-      switcher.set('A/B', 1, function (response) {
-        response.should.be.ok;
-        done();
+      
+      it('(path, value)', function () {
+        switcher.set('A/B', 1);
+        switcher.set('A/B', 1, function () {});
       });
     });
   });
   
   describe('Switcher#action', function () {
-    it('responds', function (done) {
-      switcher.action('Test', function (response) {
-        response.should.be.ok;
-        done();
+    describe('Arguments', function () {
+      it('(path)', function () {
+        switcher.action('Test');
+        switcher.action('Test', function () {});
       });
     });
   });
   
   describe('Switcher#source', function () {
-    it('responds', function (done) {
-      switcher.source('Test', source.xpt(1), function (response) {
-        response.should.be.ok;
-        done();
+    describe('Arguments', function () {
+      it('(path, source)', function () {
+        switcher.source('Test', source.xpt(1));
+        switcher.source('Test', source.xpt(1), function () {});
       });
     });
   });
