@@ -42,6 +42,10 @@ describe('fsn.Node', function () {
       c.child('D:1');
       node.toString().should.eql(before);
     });
+    
+    it('can disable child node creation', function () {
+      should.not.exist(node.child('D', false));
+    });
   });
   
   describe('Node#remove', function () {
