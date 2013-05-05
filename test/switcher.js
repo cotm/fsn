@@ -62,6 +62,35 @@ describe('fsn.Switcher', function () {
     });
   });
   
+  describe('Switcher#watch', function () {
+    it('watch()', function (done) {
+      var listener = switcher.watch(function (message) {
+        message.name.should.eql('Frame');
+        switcher.unwatch(listener);
+        done();
+      });
+      switcher.query();
+    });
+    
+    it('watch(path to a parent node)', function (done) {
+      var listener = switcher.watch('SystemCard:0/Enet:0', function (node) {
+        node.name.should.eql('Enet');
+        switcher.unwatch(listener);
+        done();
+      });
+      switcher.query();
+    });
+    
+    it('watch(path to a child node)', function (done) {
+      var listener = switcher.watch('SystemCard:0/Enet:0/IP', function (value) {
+        value.should.match(/[\d\.]+/);
+        switcher.unwatch(listener);
+        done();
+      });
+      switcher.query();
+    });
+  });
+  
   describe('Switcher#set', function () {
     describe('Arguments', function () {
       it('(Object)', function () {
