@@ -2,64 +2,41 @@ var should = require('should');
 
 var Node = require('../lib/Node').Node;
 
-describe('fsn.Node', function () {
-  describe('Properties', function () {
-    var node = new Node('A:1');
-    
-    it('id', function () {
-      node.id.should.eql('A:1');
-      node.toString().should.match(/A Num="1"/);
+describe('Node', function () {
+  describe('#child(path)', function () {
+    it('should create new nodes', function () {
+      var node = new Node('A');
+      node.child('B:0/C:1');
+      node.toString().replace(/\n/g, '').should.match(/A><B Num="0"><C Num="1">/);
     });
     
-    it('name', function () {
-      node.name.should.eql('A');
-    });
-    
-    it('num', function () {
-      node.num.should.be.a('number');
-      node.num.should.eql(1);
+    it('should return existing nodes', function () {
+      var node = new Node('A');
+      var b = node.child('B');
+      node.child('B').should.equal(b);
     });
   });
   
-  describe('Node#child', function () {
-    var node = new Node('A');
-    
-    it('create a child node', function () {
-      node.child('B:0');
-      node.toString().replace(/\n/g, '').should.eql('<A><B Num="0"></B></A>');
+  describe('#child(path, false)', function () {
+    it('should return existing nodes', function () {
+      var node = new Node('A');
+      var b = node.child('B');
+      node.child('B', false).should.equal(b);
     });
     
-    it('recursively create child nodes', function () {
-      node.child('C/D:1');
-      node.toString().replace(/\n/g, '').should.match(/\/B><C/);
-      node.toString().replace(/\n/g, '').should.match(/<C><D Num="1">/);
-    });
-    
-    it('return existing node', function () {
-      var before = node.toString();
-      node.child('B:0');
-      var c = node.child('C');
-      c.child('D:1');
-      node.toString().should.eql(before);
-    });
-    
-    it('can disable child node creation', function () {
-      should.not.exist(node.child('D', false));
+    it('should otherwise return undefined', function () {
+      var node = new Node('A');
+      should.not.exist(node.child('B', false));
     });
   });
   
-  describe('Node#remove', function () {
-    var node = new Node('A');
-    node.child('B/C/D');
-    
-    it('remove leaf node', function () {
-      node.child('B/C/D').remove();
-      node.toString().replace(/\n/g, '').should.match(/<C><\/C>/);
-    });
-    
-    it('remove subtree', function () {
-      node.child('B').remove();
-      node.toString().replace(/\n/g, '').should.eql('<A></A>');
+  describe('#remove()', function () {
+    it('should remove from parent node', function () {
+      var parent = new Node('A');
+      var before = parent.toString();
+      var child = parent.child('B');
+      child.remove();
+      parent.toString().should.eql(before);
     });
   });
 });
