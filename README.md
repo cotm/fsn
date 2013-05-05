@@ -9,8 +9,8 @@
 ## Example
 
 ```js
-var fsn = require('fsn');
-var switcher = fsn.connect();
+var fsn = require('fsn'),
+    switcher = fsn.connect();
 
 var dsk = switcher.scope('Frame:0/MECard:0/HME:0/DSK:0/Key:0');
 
@@ -18,6 +18,10 @@ dsk.set('TransTime', 30);
 
 dsk.action('AutoTrans', function (response) {
   console.log(response.toString());
+});
+
+dsk.watch('PGMMode', function (mode) {
+  console.log('DSK visible: ' + mode);
 });
 ```
 
