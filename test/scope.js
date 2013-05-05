@@ -97,7 +97,7 @@ describe('fsn.Scope', function () {
         scopeC = scopeB.scope('C');
     
     it('nest one level deep', function () {
-      scopeB.switcher.should.equal(scope);
+      scopeB.parent.should.equal(scope);
       
       var mock = sinon.mock(switcher);
       mock.expects('set').withArgs({'Test/B/X': 1});
@@ -106,7 +106,7 @@ describe('fsn.Scope', function () {
     });
     
     it('nest two levels deep', function () {
-      scopeC.switcher.should.equal(scopeB);
+      scopeC.parent.should.equal(scopeB);
       
       var mock = sinon.mock(switcher);
       mock.expects('set').withArgs({'Test/B/C/X': 1});
