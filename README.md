@@ -82,6 +82,5 @@ hme.action('ME:0/AutoTrans');
 
 ## To Do
 
-- Store known switcher state in its `state` property and update the values whenever a message is received (whether from the XML socket or the async socket).
 - Helpers for returning `Scope` objects with commonly-used paths.
 - Write good tests for Switcher
