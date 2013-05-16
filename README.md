@@ -12,7 +12,7 @@
 var fsn = require('fsn'),
     switcher = fsn.connect();
 
-var dsk = switcher.scope('Frame:0/MECard:0/HME:0/DSK:0/Key:0');
+var dsk = switcher.scope('MECard:0/HME:0/DSK:0/Key:0');
 
 dsk.set('TransTime', 30);
 
