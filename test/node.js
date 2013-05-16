@@ -41,7 +41,7 @@ describe('Node', function () {
   });
   
   describe('#each()', function () {
-    it('should iterate over every child node', function (done) {
+    it('should iterate over every child node', function () {
       var node = new Node('A');
       node.child('B:0/C:0/D:0');
       node.child('E:0/F:0/G:0');
@@ -50,12 +50,28 @@ describe('Node', function () {
       node.each(function (path, child) {
         seen.push(child.name);
       });
+      seen.length.should.eql(6);
+      seen.join('').should.eql('BCDEFG');
+    });
+  });
+  
+  describe('#updateValues()', function () {
+    it('should change each node value', function () {
+      var dest = new Node('A');
+      dest.child('B').value = '1';
+      dest.child('C/D').value = '2';
       
-      process.nextTick(function () {
-        seen.length.should.eql(6);
-        seen.join('').should.eql('BCDEFG');
-        done();
-      });
+      var source = new Node('X');
+      source.child('B').value = '2';
+      source.child('C/D').value = '3';
+      source.child('E').value = '4';
+      
+      dest.updateValues(source);
+      
+      dest.child('B').value.should.eql('2');
+      dest.child('C/D').value.should.eql('3');
+      should.exist(dest.child('E', false));
+      dest.child('E').value.should.eql('4');
     });
   });
 });
