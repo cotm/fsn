@@ -30,18 +30,8 @@ describe('Node', function () {
     });
   });
   
-  describe('#remove()', function () {
-    it('should remove from parent node', function () {
-      var parent = new Node('A');
-      var before = parent.toString();
-      var child = parent.child('B');
-      child.remove();
-      parent.toString().should.eql(before);
-    });
-  });
-  
   describe('#each()', function () {
-    it('should iterate over every child node', function () {
+    it('should return each child node', function () {
       var node = new Node('A');
       node.child('B:0/C:0/D:0');
       node.child('E:0/F:0/G:0');
@@ -53,25 +43,45 @@ describe('Node', function () {
       seen.length.should.eql(6);
       seen.join('').should.eql('BCDEFG');
     });
+    
+    it('should return each child path sans parent id', function () {
+      var node = new Node('A');
+      node.child('B/C/D');
+      
+      var i = 0, paths = ['B', 'B/C', 'B/C/D'];
+      node.each(function (path, child) {
+        path.should.eql(paths[i++]);
+      });
+    });
   });
   
   describe('#updateValues()', function () {
-    it('should change each node value', function () {
+    it('should replace each node value', function () {
       var dest = new Node('A');
-      dest.child('B').value = '1';
-      dest.child('C/D').value = '2';
+      dest.child('B').value = 'old';
+      dest.child('C/D').value = 'old';
       
       var source = new Node('X');
-      source.child('B').value = '2';
-      source.child('C/D').value = '3';
-      source.child('E').value = '4';
+      source.child('B').value = 'new';
+      source.child('C/D').value = 'new';
+      source.child('E').value = 'new';
       
       dest.updateValues(source);
       
-      dest.child('B').value.should.eql('2');
-      dest.child('C/D').value.should.eql('3');
+      dest.child('B').value.should.eql('new');
+      dest.child('C/D').value.should.eql('new');
       should.exist(dest.child('E', false));
-      dest.child('E').value.should.eql('4');
+      dest.child('E').value.should.eql('new');
+    });
+  });
+  
+  describe('#remove()', function () {
+    it('should remove from parent node', function () {
+      var parent = new Node('A');
+      var before = parent.toString();
+      var child = parent.child('B');
+      child.remove();
+      parent.toString().should.eql(before);
     });
   });
 });

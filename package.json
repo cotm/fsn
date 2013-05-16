@@ -1,8 +1,7 @@
 {
   "name": "fsn",
   "version": "0.6.4",
-  "description": "Control Barco FSN series switchers",
-  "author": "Todd Yandell <tyandell@churchonthemove.com>",
+  "description": "Control Barco FSN switchers",
   "keywords": [
     "barco",
     "switcher",
@@ -18,5 +17,5 @@
     "should": "~1.2.2",
     "sinon": "~1.6.0"
   },
-  "main": "fsn"
+  "main": "./fsn"
 }
