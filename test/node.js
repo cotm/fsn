@@ -39,4 +39,23 @@ describe('Node', function () {
       parent.toString().should.eql(before);
     });
   });
+  
+  describe('#each()', function () {
+    it('should iterate over every child node', function (done) {
+      var node = new Node('A');
+      node.child('B:0/C:0/D:0');
+      node.child('E:0/F:0/G:0');
+      
+      var seen = [];
+      node.each(function (path, child) {
+        seen.push(child.name);
+      });
+      
+      process.nextTick(function () {
+        seen.length.should.eql(6);
+        seen.join('').should.eql('BCDEFG');
+        done();
+      });
+    });
+  });
 });
