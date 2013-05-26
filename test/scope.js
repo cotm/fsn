@@ -70,12 +70,4 @@ describe('Scope', function () {
     scope.action('B', function () {});
     should(switcher.action.alwaysCalledWith('A/B'));
   });
-  
-  it('should prefix #source()', function () {
-    var switcher = {source: sinon.spy()};
-    var scope = new Scope(switcher, 'A');
-    scope.source('B', null);
-    scope.source('B', null, function () {});
-    should(switcher.source.alwaysCalledWith('A/B'));
-  });
 });
